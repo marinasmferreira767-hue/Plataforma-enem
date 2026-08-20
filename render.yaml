@@ -1,0 +1,48 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# NOTA MIL — Render Blueprint (plano FREE, custo R$ 0)
+# ═══════════════════════════════════════════════════════════════════════════
+#
+# COMO USAR
+#   1. Suba este projeto num repositório do GitHub.
+#   2. No painel do Render clique em New → Blueprint e cole a URL do repo.
+#   3. Render lê este arquivo e cria o serviço. Cole sua chave da IA nas
+#      envVars marcadas com `sync: false` — elas não vão para o repositório.
+#
+# LIMITAÇÕES DO PLANO FREE (leia antes de subir para produção)
+#   - O serviço "dorme" depois de 15 minutos sem tráfego. A primeira
+#     requisição depois disso demora ~30 s para acordar.
+#   - Sem disco persistente. O banco (banco.db) é apagado a cada deploy
+#     e a cada vez que o serviço acorda. Serve para demonstração; para
+#     vender de verdade, contrate o plano Starter e volte o campo
+#     `plan` para `starter` acrescentando a seção `disk`.
+#   - 750 horas/mês grátis por conta, mais que suficiente para um serviço.
+# ═══════════════════════════════════════════════════════════════════════════
+
+services:
+  - type: web
+    name: nota-mil
+    runtime: docker
+    plan: free                    # trocar para 'starter' quando for pago
+    region: oregon                # 'oregon' | 'frankfurt' | 'ohio' | 'singapore'
+    branch: main
+    healthCheckPath: /api/status
+    autoDeploy: true
+
+    envVars:
+      # Cole sua chave da Anthropic OU da OpenAI no painel do Render.
+      # Basta preencher uma das duas.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+
+      # Opcional: escolher outro modelo. Padrões ficam em ia.py.
+      - key: ANTHROPIC_MODEL
+        sync: false
+      - key: OPENAI_MODEL
+        sync: false
+
+      # No plano free não temos disco persistente; o banco vive num tmp
+      # que é limpo entre redeploys. Isto é intencional para o free.
+      - key: DB_PATH
+        value: /tmp/banco.db

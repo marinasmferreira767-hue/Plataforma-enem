@@ -1,0 +1,25 @@
+PASTA DE PROVAS EM PDF
+======================
+
+Coloque aqui os PDFs das provas seguindo a convenção de nomes:
+
+    enem_2023_dia1_caderno.pdf     <- caderno de questões
+    enem_2023_dia1_gabarito.pdf    <- gabarito da mesma prova
+
+O importante é que os dois arquivos compartilhem o mesmo prefixo e que um
+contenha "caderno" e o outro "gabarito" no nome.
+
+Depois, na raiz do projeto, rode:
+
+    python extrair_questoes.py
+
+Para conferir antes de gravar no banco:
+
+    python extrair_questoes.py --dry-run
+
+Para importar um par específico:
+
+    python extrair_questoes.py \
+        --caderno questoes_pdf/fuvest_2024_caderno.pdf \
+        --gabarito questoes_pdf/fuvest_2024_gabarito.pdf \
+        --ano 2024 --prova "FUVEST 2024" --sem-enem

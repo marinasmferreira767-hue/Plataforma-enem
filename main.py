@@ -536,8 +536,13 @@ if __name__ == "__main__":
         reload=bool(os.environ.get("DEV")),
     )
 
-from fastapi.responses import RedirectResponse
+BASE_DIR = Path(__file__).resolve().parent
+app.mount("/", StaticFiles(directory=str(BASE_DIR / "web"), html=True), name="site")
 
-@app.get("/")
-def home():
-    return RedirectResponse(url="/web/")
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+        reload=bool(os.environ.get("DEV")),
+    )

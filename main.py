@@ -537,8 +537,24 @@ if __name__ == "__main__":
     )
 
 BASE_DIR = Path(__file__).resolve().parent
-web_dir = BASE_DIR / "web" if (BASE_DIR / "web").exists() else BASE_DIR
-app.mount("/", StaticFiles(directory=str(web_dir), html=True), name="site")
+
+@app.get("/")
+def home():
+    if (BASE_DIR / "web" / "index.html").exists():
+        return FileResponse(BASE_DIR / "web" / "index.html")
+    elif (BASE_DIR / "index.html").exists():
+        return FileResponse(BASE_DIR / "index.html")
+    return {"status": "Página inicial não encontrada"}
+
+app.mount("/static", StaticFiles(directory=str(BASE_DIR)), name="static")
+
+if __name__ == "__main__":
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 8000)),
+        reload=bool(os.environ.get("DEV")),
+    )
 
 if __name__ == "__main__":
     uvicorn.run(

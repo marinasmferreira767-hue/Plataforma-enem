@@ -536,6 +536,8 @@ if __name__ == "__main__":
         reload=bool(os.environ.get("DEV")),
     )
 
+from fastapi.responses import RedirectResponse
+
 @app.get("/")
 def home():
-    return FileResponse("web/index.html")
+    return RedirectResponse(url="/web/")

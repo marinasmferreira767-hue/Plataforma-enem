@@ -538,23 +538,18 @@ if __name__ == "__main__":
 
 BASE_DIR = Path(__file__).resolve().parent
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def home():
-    if (BASE_DIR / "web" / "index.html").exists():
-        return FileResponse(BASE_DIR / "web" / "index.html")
-    elif (BASE_DIR / "index.html").exists():
-        return FileResponse(BASE_DIR / "index.html")
-    return {"status": "Página inicial não encontrada"}
-
-app.mount("/static", StaticFiles(directory=str(BASE_DIR)), name="static")
-
-if __name__ == "__main__":
-    uvicorn.run(
-        "main:app",
-        host="0.0.0.0",
-        port=int(os.environ.get("PORT", 8000)),
-        reload=bool(os.environ.get("DEV")),
-    )
+    index_path = BASE_DIR / "index.html"
+    web_index_path = BASE_DIR / "web" / "index.html"
+    
+    if web_index_path.exists():
+        with open(web_index_path, "r", encoding="utf-8") as f:
+            return f.read()
+    elif index_path.exists():
+        with open(index_path, "r", encoding="utf-8") as f:
+            return f.read()
+    return "<h1>Aplicação no ar! index.html não encontrado.</h1>"
 
 if __name__ == "__main__":
     uvicorn.run(

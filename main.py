@@ -537,7 +537,8 @@ if __name__ == "__main__":
     )
 
 BASE_DIR = Path(__file__).resolve().parent
-app.mount("/", StaticFiles(directory=str(BASE_DIR / "web"), html=True), name="site")
+web_dir = BASE_DIR / "web" if (BASE_DIR / "web").exists() else BASE_DIR
+app.mount("/", StaticFiles(directory=str(web_dir), html=True), name="site")
 
 if __name__ == "__main__":
     uvicorn.run(

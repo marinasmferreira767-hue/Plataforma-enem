@@ -22,8 +22,8 @@ from fastapi.responses import FileResponse, JSONResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
-import ia
-import seed_questoes
+# import ia
+# import seed_questoes
 from db import agora, conectar, consultar, consultar_um, executar, init_db
 from security import (
     conferir_senha,
